@@ -6,10 +6,14 @@ import pickle
 from Basic2 import *
 from Complex import *
 from Inference import *
+import time
+
 
 d = Dict("train.wtag")
 model = Basic2(d)
-model.vec = pickle.load(open('v_basic_train1', 'rb'))
+model.vec = pickle.load(open('weights_vec/v_basic2_unlimited', 'rb'))
 
+t = time.time()
 res = Inferece(model)
 res.eval(model)
+print("time: ",time.time()-t)
