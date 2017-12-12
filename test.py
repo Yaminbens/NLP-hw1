@@ -5,11 +5,23 @@ import numpy as np
 
 # with open("train1.wtag", 'r') as f:
 #     for line in f:
-#         match = re.split(' |_*', line)
+#         match = re.findall('[^ ]*|[^_]*', line)
 #         print(match)
 #         break
+# zz = 'xcvbnm'
+# z = "sdsff"
+# print(zz[-4:])
 
-a = np.ones(5)
-b= np.ones(5)*2
-a+=b
-print(a)
+
+# a = np.ones(5)
+# b= np.ones(5)*2
+# a+=b
+# print(a)
+
+# d = Dict("train1.wtag")
+# print(d.tags_dist)
+
+# ll = [[2,4],[5,7,3],[1,2]]
+# print(ll[5][1])
+
+
