@@ -22,6 +22,9 @@ class Complex:
         self.vec = []
         self.tags_dist = dic.tags_dist
         self.max_tag = dic.max_tag
+        self.word_sentence = dic.word_sentence
+        self.tag_sentence = dic.tag_sentence
+        self.tags_dist_sorted = dic.tags_dist_sorted
 
         #shift in vector calculation
         for t in dic.tags_idx.keys():
@@ -136,11 +139,11 @@ class Complex:
 
         return v1 + v2 + v3 + v4 +v5 +v6
 
-    def calc_denom(self, w, t, t_1, set_t_2):
+    def calc_denom(self, w, set_t, t_1, t_2):
         """
         return sum(exp(v*f(x,y)) for all tags for complex model
         """
         sum = 0.0
-        for t_2 in set_t_2:
+        for t in set_t:
             sum += np.exp(self.calc_f_v(w, t, t_1, t_2, self.vec))
         return sum

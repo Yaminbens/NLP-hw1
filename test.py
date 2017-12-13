@@ -18,8 +18,8 @@ import numpy as np
 # a+=b
 # print(a)
 
-# d = Dict("train1.wtag")
-# print(d.tags_dist)
+d = Dict("train.wtag")
+print(d.max_tri)
 
 # ll = [[2,4],[5,7,3],[1,2]]
 # print(ll[5][1])

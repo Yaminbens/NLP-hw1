@@ -23,6 +23,7 @@ class Basic2:
         self.max_tag = dic.max_tag
         self.word_sentence = dic.word_sentence
         self.tag_sentence = dic.tag_sentence
+        self.tags_dist_sorted = dic.tags_dist_sorted
 
         for t in dic.tags_idx.keys():
             self.tags_idx_t1.update({t: dic.tags_idx[t] + dic.word_tag_len})
@@ -76,12 +77,12 @@ class Basic2:
 
         return v1 + v2 + v3
 
-    def calc_denom(self,w, t, t_1, set_t_2):
+    def calc_denom(self,w, set_t, t_1, t_2):
         """
         return sum(exp(v*f(x,y)) for all tags for basic model
         """
         sum = 0.0
-        for t_2 in set_t_2:
+        for t in set_t:
             sum += np.exp(self.calc_f_v(w,t, t_1,t_2,self.vec))
         return sum
 
