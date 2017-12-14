@@ -72,7 +72,7 @@ def dL_func(v, *args):
                 f_f += model.feat_vec(word[0],word[2],t_1,t_2)
 
                 sum_z = 0.0
-                for z in model.tags_list:
+                for z in model.word_seen_tags[word[0]]:
                     sum_z += np.exp(model.calc_f_v(word[0], z, t_1, t_2,v))
 
                 for y in model.word_seen_tags[word[0]]:

@@ -19,7 +19,7 @@ def train_basic(dic):
     print(model_basic.vec)
     print(f)
     print(dicto)
-    pickle.dump(model_basic.vec, open("basic_vec_nolimits", 'wb'))
+    pickle.dump(model_basic.vec, open(VECSAVE, 'wb'))
     print(time()-t)
     return model_basic
 
