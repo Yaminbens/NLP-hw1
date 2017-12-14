@@ -2,15 +2,20 @@
 
 #LEARN
 #step size
-LAMBDA = 10
+LAMBDA = 1
 #maximum iteration
-MAXITER = 30
+MAXITER = 15
 #accuracy for optimization
 FACTR = 10.0
 
 #vector file save
-VECSAVE = "v_basic_45_10"
+VECSAVE = "v_basic_15_10_L=1"
 
 #WORD PARSING
 #word tag minimum occurancy
 WORDTAGFACTOR = 3
+
+
+#EVALUATION
+#vector to eval
+VECTEST = "v_basic_15_10_L=1"

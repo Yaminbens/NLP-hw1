@@ -9,7 +9,7 @@ from Inference import *
 import time
 from Parser import *
 from Dict_old import *
-
+from utils import *
 #complex
 
 # d = Dict("train.wtag")
@@ -39,7 +39,7 @@ d = Dict_old("train.wtag")
 
 #complex
 model = Basic(d)
-model.vec = pickle.load(open('weights_vec/basic_vec_nolimits', 'rb'))
+model.vec = pickle.load(open('weights_vec/'+VECTEST, 'rb'))
 # model.vec = np.zeros(35655)
 # print(np.shape(model.vec))
 # #basic
@@ -51,8 +51,8 @@ parsed = Parser("test.wtag")
 # print(parsed.tag_sentence)
 res = Inferece(model,parsed)
 
-res.eval_test("vec_results_test/basic_vec_nolimits.txt")
-with open("vec_results_test/basic_vec_nolimits.txt", 'a') as file:
+res.eval_test("vec_results_test/"+VECTEST+".txt")
+with open("vec_results_test/"+VECTEST+".txt", 'a') as file:
     file.write("top k = 3")
 
 print("time: ",time.time()-t)

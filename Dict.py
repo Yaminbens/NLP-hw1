@@ -1,6 +1,5 @@
 # words 121816
 
-import _pickle
 import re
 import numpy as np
 import operator
