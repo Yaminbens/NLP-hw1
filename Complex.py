@@ -77,22 +77,33 @@ class Complex:
             pass
 
         fpre = np.zeros(self.word_prefix_len)
-        try:
-            if len(w1) > 4:
-                fpre[self.prefix_idx[w1[:4]]] = 1
-            else:
-                fpre[self.prefix_idx[w1]] = 1
-        except:
-            pass
+        if len(w1) > 4:
+            for i in range(1,4):
+                try:
+                    fpre[self.prefix_idx[w1[:i]]+t] = 1
+                except:
+                    pass
+        else:
+            for i in range(1,len(w1)):
+                try:
+                    fpre[self.prefix_idx[w1[:i]]+t] = 1
+                except:
+                    pass
 
         fsuf = np.zeros(self.word_suffix_len)
-        try:
-            if len(w1) > 4:
-                fsuf[self.suffix_idx[w1[-4:]]] = 1
-            else:
-                fsuf[self.suffix_idx[w1]] = 1
-        except:
-            pass
+        if len(w1) > 4:
+            for i in range(1,4):
+                try:
+                    fsuf[self.suffix_idx[w1[-i:]]+t] = 1
+                except:
+                    pass
+        else:
+            for i in range(1, len(w1)):
+                try:
+                    fsuf[self.suffix_idx[w1[-i:]]+t] = 1
+                except:
+                    pass
+
         # print("right",np.shape(np.concatenate((f0w, f0t, f3, f4), axis=0)))
         return np.concatenate((fw_t, f1t, f2t, ft,fpre, fsuf), axis=0)
 
@@ -121,21 +132,34 @@ class Complex:
         except:
             v4 = 0.0
 
-        try:
-            if len(w1) > 4:
-                v5 = v[self.prefix_idx[w1[:4]]]
-            else:
-                v5 = v[self.prefix_idx[w1]]
-        except:
-            v5 = 0.0
+        v5 = 0.0
+        if len(w1) > 4:
+            for i in range(1,4):
+                try:
+                    v5 += v[self.prefix_idx[w1[:i]+t]]
+                except:
+                    pass
+        else:
+            for i in range(1,len(w1)):
+                try:
+                    v5 += v[self.prefix_idx[w1[:i]+t]]
+                except:
+                    pass
 
-        try:
-            if len(w1) > 4:
-                v6 = v[self.suffix_idx[w1[-4:]]]
-            else:
-                v6 = v[self.suffix_idx[w1]]
-        except:
-            v6 = 0.0
+        v6 = 0.0
+        if len(w1) > 4:
+            for i in range(1, 4):
+                try:
+                    v6 += v[self.prefix_idx[w1[-i:] + t]]
+                except:
+                    pass
+        else:
+            for i in range(1, len(w1)):
+                try:
+                    v6 += v[self.prefix_idx[w1[-i:] + t]]
+                except:
+                    pass
+
 
         return v1 + v2 + v3 + v4 +v5 +v6
 

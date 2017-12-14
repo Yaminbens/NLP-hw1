@@ -142,6 +142,7 @@ class Dict:
             self.tags_idx.update({"*": cntr_t})
             self.words_idx.update({"*": cntr_t})
             self.word_tag_idx.update({"**": cntr_wt})
+            print(len(self.word_tag_idx))
 
             #calculate lengths
             self.words_len = len(self.words_idx)

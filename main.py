@@ -6,18 +6,21 @@ from Basic import *
 from Complex import *
 from Inference import *
 from utils import *
-
+from time import time
 
 def train_basic(dic):
+    t = time()
+
     model_basic = Basic(dic)
     v = np.ones(model_basic.feat_vec_len)
     model_basic.vec, f, dicto = optimize.fmin_l_bfgs_b(L_v_func, v, dL_func, #TODO edit parameters
-                                                         # ("train.wtag", LAMBDA, model_basic), maxiter=MAXITER, factr=FACTR)
-                                                       ("train.wtag", LAMBDA, model_basic))
+                                                          ("train.wtag", LAMBDA, model_basic), maxiter=MAXITER, factr=FACTR)
+                                                       # ("train1.wtag", LAMBDA, model_basic))
     print(model_basic.vec)
     print(f)
     print(dicto)
     pickle.dump(model_basic.vec, open("basic_vec_nolimits", 'wb'))
+    print(time()-t)
     return model_basic
 
 

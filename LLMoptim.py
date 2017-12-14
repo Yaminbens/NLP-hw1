@@ -32,7 +32,7 @@ def L_v_func(v, *args):
                 word = re.findall("[^_]*", w)
                 v_f += model.calc_f_v(word[0], word[2], t_1, t_2, v)
                 tmp = 0
-                for y in model.word_seen_tags:
+                for y in model.word_seen_tags[word[0]]:
                     tmp += np.exp(model.calc_f_v(word[0],y,t_1,t_2,v))
                 e_v_f += np.log(tmp)
                 # e_v_f += np.log(np.sum(np.exp(Dict.calc_f_v(dic,word[0],y,t_1,t_2,v))
@@ -72,10 +72,10 @@ def dL_func(v, *args):
                 f_f += model.feat_vec(word[0],word[2],t_1,t_2)
 
                 sum_z = 0.0
-                for z in model.word_seen_tags:
+                for z in model.tags_list:
                     sum_z += np.exp(model.calc_f_v(word[0], z, t_1, t_2,v))
 
-                for y in model.word_seen_tags:
+                for y in model.word_seen_tags[word[0]]:
                     s_temp = sig(v,model,word[0],y,t_1,t_2,sum_z)
                     f_p += model.feat_vec(word[0],y,t_1,t_2)*s_temp
 

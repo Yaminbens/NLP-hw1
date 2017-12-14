@@ -1,4 +1,5 @@
 import re
+from utils import *
 
 class Parser:
 
@@ -45,9 +46,10 @@ class Parser:
                 else:
                     self.word_tag_dist[self.word_sentence[i][j]+self.tag_sentence[i][j]] += 1
 
+
     def filter_word_tag(self):
         for wt in self.word_tag_dist.keys():
-            if self.word_tag_dist[wt] > 4:
+            if self.word_tag_dist[wt] >= WORDTAGFACTOR:
                 self.word_tag_filtered.append(wt)
 
 
