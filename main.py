@@ -26,7 +26,7 @@ def main():
     # print(zzz)
     # print(time.time()-t)
     # zzzzz = optimize.check_grad(L_v_func,dL_func,[v], "train1.wtag",1,d)
-    model.vec, f, diccc = optimize.fmin_l_bfgs_b(L_v_func,v, dL_func,("train.wtag",1,model), maxiter=30, factr=10.0)
+    model.vec, f, diccc = optimize.fmin_l_bfgs_b(L_v_func,v, dL_func,("train.wtag",0.5,model), maxiter=15, factr=10.0)
     # iprint = 99, factr=10.0, maxiter=15)
     print(model.vec)
     print(f)

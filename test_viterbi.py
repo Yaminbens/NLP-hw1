@@ -8,6 +8,8 @@ from Complex import *
 from Inference import *
 import time
 from Parser import *
+from Dict_old import *
+
 #complex
 
 # d = Dict("train.wtag")
@@ -32,7 +34,7 @@ from Parser import *
 
 #test
 
-d = Dict("train.wtag")
+d = Dict_old("train.wtag")
 # print(d.tags_dist_sorted)
 
 #complex
@@ -49,10 +51,11 @@ parsed = Parser("test.wtag")
 # print(parsed.tag_sentence)
 res = Inferece(model,parsed)
 
-res.eval_test(parsed,"vec_results_test/v_complex_30_10.txt")
+res.eval_test("vec_results_test/v_complex_30_10.txt")
 with open("vec_results_test/v_complex_30_10.txt", 'a') as file:
-    file.write("top k = 3, appended NNS,CD")
+    file.write("top k = 3")
 
 print("time: ",time.time()-t)
 
-res.print_confusion()
+#res.print_confusion()
+# res.tag_text("tagged_text.wtag")

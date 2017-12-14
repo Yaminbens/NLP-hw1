@@ -10,11 +10,26 @@ class Inferece:
     def __init__(self,model,parser):
         self.confusion = {}
         self.results = []
+        self.parser = parser
+        self.model = model
+        self.N = 0
         for sentence in parser.word_sentence:
             self.results.append(self.viterbi(sentence,model))
 
+
+    def calc_set(self,word):
+        if word in self.model.word_seen_tags:
+            set_tag = self.model.word_seen_tags[word]
+        elif word[0].isdigit():
+            set_tag = ['CD']
+        else:
+            set_tag = self.model.tags_dist_sorted[-self.N:]
+            # set_v.append('NNS')
+            # set_v.append('CD')
+        return set_tag
+
     def viterbi(self,sentence, model):
-        N = 3
+        self.N = 3
         if sentence == []:
             return sentence
         pi = {}
@@ -26,54 +41,31 @@ class Inferece:
                 back_pointer.append({})
             pi_aux = {}
 
-            if sentence[k] in model.word_seen_tags:
-                set_v = model.word_seen_tags[sentence[k]]
-            elif sentence[k][0].isdigit():
-                set_v = ['CD']
-            else:
-                set_v = model.tags_dist_sorted[-N:]
-                set_v.append('NNS')
-                set_v.append('CD')
+            set_v = self.calc_set(sentence[k])
 
             for v in set_v:  # todo: need to limit to 3-4 max tags
                 if k == 0:
                     set_u = ['*']
                 else:
-                    if sentence[k - 1]in model.word_seen_tags:
-                        set_u = model.word_seen_tags[sentence[k - 1]]  # todo: word_tags has to take into account: 1)unseen words 2)numbers,3)seen words
-                    elif sentence[k-1][0].isdigit():
-                        set_u = ['CD']
-                    else:
-                        set_u = model.tags_dist_sorted[-N:]
-                        set_u.append('NNS')
-                        set_u.append('CD')
-                    # set_u = model.tags_list
+                    set_u = self.calc_set(sentence[k-1])
                 for u in set_u:
                     max_value, max_tag = 0, "dummy"
                     if k == 0 or k == 1:
                         set_t = ['*']
                     else:
-                        if sentence[k - 2] in model.word_seen_tags:
-                            set_t = model.word_seen_tags[sentence[k - 2]]
-                        elif sentence[k-2][0].isdigit():
-                            set_t = ['CD']
-                        else:
-                            set_t = model.tags_dist_sorted[-N:]
-                            set_t.append('NNS')
-                            set_t.append('CD')
-                        # set_t = model.tags_list
+                        set_t = self.calc_set(sentence[k-2])
 
                     for t in set_t:
                         denom = model.calc_denom(sentence[k], set_v, u, t)
                         tmp_calc = model.calc_f_v(sentence[k], v, u, t,model.vec)
                         result = np.exp(tmp_calc)/denom  # todo calc_prob
                         if k > 0:
-                            try:
-                                result *= pi[(t,u)]
-                            except:
-                                pass
+                            # try:
+                            #     result *= pi[(t,u)]
+                            # except:
+                            #     pass
                             # print("k:",k)
-                            # result *= pi[(t, u)]
+                            result *= pi[(t, u)]
                         # find max over t
                         if result > max_value:
                             max_value = result
@@ -116,7 +108,7 @@ class Inferece:
     #
     #     print("correct: ", 100*accuracy/(accuracy+missed))
 
-    def eval_test(self,parser,filename):
+    def eval_test(self,filename):
 
         accuracy = 0.0
         missed = 0.0
@@ -132,45 +124,46 @@ class Inferece:
 
         file = open(filename, 'w')
 
-        for i,sentence in enumerate(parser.tag_sentence):
+        for i,sentence in enumerate(self.parser.tag_sentence):
             for j,word in enumerate(sentence):
-                if self.results[i][j] == parser.tag_sentence[i][j]:
+                if self.results[i][j] == self.parser.tag_sentence[i][j]:
                     accuracy+=1
                 else:
                     missed+=1
-                    if parser.word_sentence[i][j] in parser.word_sentence:
+                    if self.parser.word_sentence[i][j] in self.parser.word_sentence:
                         seen = 'seen'
                     else:
                         seen = 'unseen'
-                    file.write("guess: "+self.results[i][j]+" true: "+parser.tag_sentence[i][j]+ " word: "+parser.word_sentence[i][j]+" "+seen+"\n")
+                    file.write("guess: "+self.results[i][j]+" true: "+self.parser.tag_sentence[i][j]+ " word: "+self.parser.word_sentence[i][j]+" "+seen+"\n")
 
                     #confusion matrix
-                    if parser.tag_sentence[i][j] not in self.confusion:
-                        self.confusion.update({parser.tag_sentence[i][j]:{}})
-                    if self.results[i][j] not in self.confusion[parser.tag_sentence[i][j]]:
-                        self.confusion[parser.tag_sentence[i][j]].update({self.results[i][j]:1})
+                    if self.parser.tag_sentence[i][j] not in self.confusion:
+                        self.confusion.update({self.parser.tag_sentence[i][j]:{}})
+                    if self.results[i][j] not in self.confusion[self.parser.tag_sentence[i][j]]:
+                        self.confusion[self.parser.tag_sentence[i][j]].update({self.results[i][j]:1})
                     else:
-                        self.confusion[parser.tag_sentence[i][j]][self.results[i][j]]+=1
+                        self.confusion[self.parser.tag_sentence[i][j]][self.results[i][j]]+=1
 
-                    if len(parser.word_sentence[i][j]) == 1:
-                        if parser.word_sentence[i][j][0].isupper():
+                    if len(self.parser.word_sentence[i][j]) == 1:
+                        if self.parser.word_sentence[i][j][0].isupper():
                             cap_let +=1
                             cap_word += 1
-                            cap_let_l.append(parser.word_sentence[i][j]+" | guess: "+self.results[i][j] +" | true: "+ parser.tag_sentence[i][j])
-                            cap_word_l.append(parser.word_sentence[i][j]+" | guess: "+self.results[i][j] +" | true: "+ parser.tag_sentence[i][j])
-                    elif len(parser.word_sentence[i][j]) > 1:
-                        if parser.word_sentence[i][j][0].isupper():
+                            cap_let_l.append(self.parser.word_sentence[i][j]+" | guess: "+self.results[i][j] +" | true: "+ self.parser.tag_sentence[i][j])
+                            cap_word_l.append(self.parser.word_sentence[i][j]+" | guess: "+self.results[i][j] +" | true: "+ self.parser.tag_sentence[i][j])
+                    elif len(self.parser.word_sentence[i][j]) > 1:
+                        if self.parser.word_sentence[i][j][0].isupper():
                             cap_let += 1
-                            cap_let_l.append(parser.word_sentence[i][j]+" | guess: "+self.results[i][j] +" | true: "+ parser.tag_sentence[i][j])
-                            if parser.word_sentence[i][j][1].isupper():
+                            cap_let_l.append(self.parser.word_sentence[i][j]+" | guess: "+self.results[i][j] +" | true: "+ self.parser.tag_sentence[i][j])
+                            if self.parser.word_sentence[i][j][1].isupper():
                                 cap_word += 1
                                 cap_word_l.append(
-                                    parser.word_sentence[i][j] + " | guess: " + self.results[i][j] + " | true: " +
-                                    parser.tag_sentence[i][j])
-                        if parser.word_sentence[i][j][0].isdigit():
+                                    self.parser.word_sentence[i][j] + " | guess: " + self.results[i][j] + " | true: " +
+                                    self.parser.tag_sentence[i][j])
+                        if self.parser.word_sentence[i][j][0].isdigit():
                             num += 1
-                            num_l.append(parser.word_sentence[i][j])
-
+                            num_l.append(
+                                    self.parser.word_sentence[i][j] + " | guess: " + self.results[i][j] + " | true: " +
+                                    self.parser.tag_sentence[i][j])
         print("capital letters:",cap_let)
         print(cap_let_l)
         print("capital word: ", cap_word)
@@ -200,4 +193,14 @@ class Inferece:
         #     for false_tag in self.confusion[true_tag].keys():
         #         file.write(false_tag+": "+str(self.confusion[true_tag][false_tag])+"\n")
         #     file.write("\n\n")
+
+
+    def tag_text(self,filename):
+
+        with open(filename, 'w') as file:
+
+            for i,sentence in enumerate(self.parser.word_sentence):
+                for j,word in enumerate(sentence):
+                    file.write(self.parser.word_sentence[i][j]+"_"+self.results[i][j]+" ")
+                file.write("\n")
 
