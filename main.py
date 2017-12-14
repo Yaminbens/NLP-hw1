@@ -1,47 +1,49 @@
 from Dict import *
-from Optim import *
+from LLMoptim import *
 from scipy import optimize
-import time
 import pickle
-from Basic2 import *
+from Basic import *
 from Complex import *
 from Inference import *
+from utils import *
+
+
+def train_basic(dic):
+    model_basic = Basic(dic)
+    v = np.ones(model_basic.feat_vec_len)
+    model_basic.vec, f, dicto = optimize.fmin_l_bfgs_b(L_v_func, v, dL_func, #TODO edit parameters
+                                                         # ("train.wtag", LAMBDA, model_basic), maxiter=MAXITER, factr=FACTR)
+                                                       ("train.wtag", LAMBDA, model_basic))
+    print(model_basic.vec)
+    print(f)
+    print(dicto)
+    pickle.dump(model_basic.vec, open("basic_vec_nolimits", 'wb'))
+    return model_basic
+
+
+def train_complex(dic):
+    model_complex = Complex(dic)
+    v = np.ones(model_complex.feat_vec_len)
+    model_complex.vec, f, dicto = optimize.fmin_l_bfgs_b(L_v_func, v, dL_func, #TODO edit parameters
+                                                         ("train.wtag", LAMBDA, model_complex), maxiter=MAXITER, factr=FACTR)
+    print(model_complex.vec)
+    print(f)
+    print(dicto)
+    pickle.dump(model_complex.vec, open("complex_vec_"+MAXITER+"_"+FACTR, 'wb'))
+    return model_complex
 
 def main():
-    t = time.time()
-    d = Dict("train.wtag")
-    # print(d.prefix_filtered)
-    # print(d.suffix_filtered)
-    # print(len(d.word_tag_dist))
-    # print(len(d.word_tag_filtered))
-    # model = Basic2(d)
-    # v = np.ones(model.feat_vec_len)
 
-    model = Complex(d)
-    v = np.ones(model.feat_vec_len)
-    # print(d.tags_list)
-    # zzz = L_v_func(v, "train1.wtag", 0.1, c)
-    # zzz = dL_func(v,"train1.wtag", 0.1,c)
-    # print(np.shape(zzz))
-    # print(zzz)
-    # print(time.time()-t)
-    # zzzzz = optimize.check_grad(L_v_func,dL_func,[v], "train1.wtag",1,d)
-    model.vec, f, diccc = optimize.fmin_l_bfgs_b(L_v_func,v, dL_func,("train.wtag",0.5,model), maxiter=15, factr=10.0)
-    # iprint = 99, factr=10.0, maxiter=15)
-    print(model.vec)
-    print(f)
-    print(diccc)
-    pickle.dump(model.vec, open("v_newcomplex_30_10", 'wb'))
+    #Parsing and initiating dictionaries for features vector
+    dictionary = Dict("train.wtag")
 
-    # for xx in list(x):
-    #     print(xx)
+    # Training - Basic Model
+    model_basic = train_basic(dictionary)
 
+    #Training - Complex Model
+    # model_complex = train_complex(dictionary)
 
-        # # print(d.words_idx)
-
-    # for w in dictionary.word_tag.keys():
-    #     print(w," ",dictionary.word_tag[w])
-    # print(dictionary.tags_idx)
+    #
 
 
 if __name__ == "__main__":

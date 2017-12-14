@@ -2,7 +2,7 @@ from scipy import optimize
 import re
 from Dict import Dict
 import numpy as np
-from Basic2 import *
+from Basic import *
 import pickle
 
 d = Dict("train.wtag")

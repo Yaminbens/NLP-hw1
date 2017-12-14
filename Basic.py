@@ -2,7 +2,7 @@ import re
 import numpy as np
 
 
-class Basic2:
+class Basic:
 
     def __init__(self, dic):
         self.word_tag_len = dic.word_tag_len

@@ -1,5 +1,5 @@
 import numpy as np
-from Basic2 import *
+from Basic import *
 from Complex import *
 import csv
 import pandas as pd
@@ -116,10 +116,14 @@ class Inferece:
         cap_let = 0.0
         cap_word = 0.0
         num = 0.0
+        num_txt = 0.0
 
         cap_let_l = []
         cap_word_l = []
         num_l = []
+        text_num = []
+        text_num_list = ['one','two','three','four','five','six','seven','eight','nine','ten','hundred','thousand'
+            ,'milion','One','Two','Three','Four','Five','Six','Seven','Eight','Nine','Ten','Hundred','Thousand','Milion']
 
 
         file = open(filename, 'w')
@@ -164,17 +168,25 @@ class Inferece:
                             num_l.append(
                                     self.parser.word_sentence[i][j] + " | guess: " + self.results[i][j] + " | true: " +
                                     self.parser.tag_sentence[i][j])
+                        for x in text_num_list:
+                            if x in self.parser.word_sentence[i][j]:
+                                num_txt += 1
+                                text_num.append(
+                                    self.parser.word_sentence[i][j] + " | guess: " + self.results[i][j] + " | true: " +
+                                    self.parser.tag_sentence[i][j])
         print("capital letters:",cap_let)
         print(cap_let_l)
         print("capital word: ", cap_word)
         print(cap_word_l)
         print("number: ",num)
         print(num_l)
+        print("textual number: ",num_txt)
+        print(text_num)
 
         print("correct: ", 100*accuracy/(accuracy+missed))
 
 
-    def print_confusion(self):
+    def print_confusion(self,file):
 
         # with open('conf.csv', 'w') as f:  # Just use 'w' mode in 3.x
         #     for true_tag in self.confusion:
@@ -185,7 +197,7 @@ class Inferece:
 
         df = pd.DataFrame.from_dict(self.confusion)
         df = df.transpose()
-        df.to_csv("conf.csv", encoding='utf-8')
+        df.to_csv(file+".csv", encoding='utf-8')
         # file = open("confusion_matrix","w")
         # file.write("\nConfusion Matrix\n\n\n")
         # for true_tag in self.confusion:

@@ -1,9 +1,9 @@
 from Dict import *
-from Optim import *
+from LLMoptim import *
 from scipy import optimize
 import time
 import pickle
-from Basic2 import *
+from Basic import *
 from Complex import *
 from Inference import *
 import time
@@ -38,8 +38,8 @@ d = Dict_old("train.wtag")
 # print(d.tags_dist_sorted)
 
 #complex
-model = Complex(d)
-model.vec = pickle.load(open('weights_vec/v_complex_30_10', 'rb'))
+model = Basic2(d)
+model.vec = pickle.load(open('weights_vec/v_basic2_15', 'rb'))
 # model.vec = np.zeros(35655)
 # print(np.shape(model.vec))
 # #basic
@@ -51,11 +51,11 @@ parsed = Parser("test.wtag")
 # print(parsed.tag_sentence)
 res = Inferece(model,parsed)
 
-res.eval_test("vec_results_test/v_complex_30_10.txt")
-with open("vec_results_test/v_complex_30_10.txt", 'a') as file:
+res.eval_test("vec_results_test/v_basic2_15.txt")
+with open("vec_results_test/v_basic2_15.txt", 'a') as file:
     file.write("top k = 3")
 
 print("time: ",time.time()-t)
 
-#res.print_confusion()
+res.print_confusion("basic_conf")
 # res.tag_text("tagged_text.wtag")
