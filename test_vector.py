@@ -1,6 +1,6 @@
 from scipy import optimize
 import re
-from dicts import Dict
+from Dict import Dict
 import numpy as np
 from Basic2 import *
 import pickle

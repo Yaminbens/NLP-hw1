@@ -1,5 +1,5 @@
-from dicts import *
-from poptim import *
+from Dict import *
+from Optim import *
 from scipy import optimize
 import time
 import pickle
@@ -10,7 +10,10 @@ from Inference import *
 def main():
     t = time.time()
     d = Dict("train.wtag")
-
+    # print(d.prefix_filtered)
+    # print(d.suffix_filtered)
+    # print(len(d.word_tag_dist))
+    # print(len(d.word_tag_filtered))
     # model = Basic2(d)
     # v = np.ones(model.feat_vec_len)
 
@@ -23,12 +26,12 @@ def main():
     # print(zzz)
     # print(time.time()-t)
     # zzzzz = optimize.check_grad(L_v_func,dL_func,[v], "train1.wtag",1,d)
-    model.vec, f, diccc = optimize.fmin_l_bfgs_b(L_v_func,v, dL_func,("train.wtag",1,model), maxiter=15,factr=10.0)
+    model.vec, f, diccc = optimize.fmin_l_bfgs_b(L_v_func,v, dL_func,("train.wtag",1,model), maxiter=30, factr=10.0)
     # iprint = 99, factr=10.0, maxiter=15)
     print(model.vec)
     print(f)
     print(diccc)
-    pickle.dump(model.vec, open("v_complex_15_10", 'wb'))
+    pickle.dump(model.vec, open("v_newcomplex_30_10", 'wb'))
 
     # for xx in list(x):
     #     print(xx)

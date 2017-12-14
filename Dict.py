@@ -4,6 +4,7 @@ import _pickle
 import re
 import numpy as np
 import operator
+from Parser import *
 
 class Dict:
 
@@ -13,14 +14,34 @@ class Dict:
         cntr_wt = 0
         cntr_prefix = 0
         cntr_suffix = 0
+
+        parse = Parser(file)
+        parse.prefix_suffix_dist()
+        self.prefix_dist = parse.prefix_dist
+        self.suffix_dist = parse.suffix_dist
+
+        parse.filter_pre_suf()
+        self.prefix_filtered = parse.prefix_filtered
+        self.suffix_filtered = parse.suffix_filtered
+
+        parse.word_tag_distrib()
+        self.word_tag_dist = parse.word_tag_dist
+
+        parse.filter_word_tag()
+        self.word_tag_filtered = parse.word_tag_filtered
+
         with open(file, 'r') as f:
             self.words_idx = {}
             self.words_cnt = {}
             self.tags_idx = {}
             self.word_seen_tags = {}
             self.word_tag_idx = {}
+
             self.word_prefix = {}
             self.word_suffix = {}
+            self.word_prefix_dist = {}
+            self.word_suffix_dist = {}
+
             self.word_sentence = []
             self.tag_sentence = []
             self.tags_dist = {} #tag distribution
@@ -61,31 +82,34 @@ class Dict:
                         cntr_t += 1
 
                     #dict of words and their seen tags
+
                     if word[0] not in self.word_seen_tags:
                         self.word_seen_tags.update({word[0]: [word[2]]})
                     elif word[2] not in self.word_seen_tags[word[0]]:
                         self.word_seen_tags[word[0]].extend([word[2]])
 
                     #dict of words and tags
-                    if word[0]+word[2] not in self.word_tag_idx:
+                    if word[0]+word[2] not in self.word_tag_idx and word[0]+word[2] in self.word_tag_filtered:
                         self.word_tag_idx.update({word[0]+word[2]: cntr_wt})
                         cntr_wt += 1
 
                     #dict of suffixes and prefixes
                     if len(word[0]) > 4:
-                        if word[0][:4]+word[2] not in self.word_prefix:
-                            self.word_prefix.update({word[0][:4]+word[2]: cntr_prefix})
-                            cntr_prefix+=1
-                        if word[0][-4:]+word[2] not in self.word_suffix:
-                            self.word_suffix.update({word[0][-4:]+word[2]: cntr_suffix})
-                            cntr_suffix += 1
+                        for i in range(1, 4):
+                            if word[0][:i]+word[2] not in self.word_prefix and word[0][:i] in self.prefix_filtered:
+                                self.word_prefix.update({word[0][:i]+word[2]: cntr_prefix})
+                                cntr_prefix+=1
+                            if word[0][-i:]+word[2] not in self.word_suffix and word[0][:i] in self.suffix_filtered:
+                                self.word_suffix.update({word[0][-i:]+word[2]: cntr_suffix})
+                                cntr_suffix += 1
                     else:
-                        if word[0]+word[2] not in self.word_prefix:
-                            self.word_prefix.update({word[0]+word[2]: cntr_prefix})
-                            cntr_prefix+=1
-                        if word[0]+word[2] not in self.word_suffix:
-                            self.word_suffix.update({word[0]+word[2]: cntr_suffix})
-                            cntr_suffix+=1
+                        for i in range(1, len(word[0])):
+                            if word[0][:i]+word[2] not in self.word_prefix and word[0][:i] in self.prefix_filtered:
+                                self.word_prefix.update({word[0][:i]+word[2]: cntr_prefix})
+                                cntr_prefix+=1
+                            if word[0][-i:]+word[2] not in self.word_suffix and word[0][:i] in self.suffix_filtered:
+                                self.word_suffix.update({word[0][-i:]+word[2]: cntr_suffix})
+                                cntr_suffix += 1
 
                     #tags distribution
                     if word[2] not in self.tags_dist:

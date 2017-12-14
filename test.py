@@ -1,6 +1,6 @@
 from scipy import optimize
 import re
-from dicts import Dict
+from Dict import Dict
 import numpy as np
 
 # with open("train1.wtag", 'r') as f:
