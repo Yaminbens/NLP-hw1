@@ -34,7 +34,7 @@ from utils import *
 
 #test
 
-d = Dict_old("train.wtag")
+d = Dict("train.wtag")
 # print(d.tags_dist_sorted)
 
 #complex
@@ -51,11 +51,6 @@ parsed = Parser("test.wtag")
 # print(parsed.tag_sentence)
 res = Inferece(model,parsed)
 
-res.eval_test("vec_results_test/"+VECTEST+".txt")
-with open("vec_results_test/"+VECTEST+".txt", 'a') as file:
-    file.write("top k = 3")
+res.eval_test()
 
-print("time: ",time.time()-t)
 
-res.print_confusion("basic_conf")
-# res.tag_text("tagged_text.wtag")

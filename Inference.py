@@ -3,6 +3,7 @@ from Basic import *
 from Complex import *
 import csv
 import pandas as pd
+from utils import *
 
 #need to supply calc_prob,word_tags see explanation in mail
 
@@ -108,7 +109,7 @@ class Inferece:
     #
     #     print("correct: ", 100*accuracy/(accuracy+missed))
 
-    def eval_test(self,filename):
+    def eval_test(self,file):
 
         accuracy = 0.0
         missed = 0.0
@@ -122,11 +123,10 @@ class Inferece:
         cap_word_l = []
         num_l = []
         text_num = []
-        text_num_list = ['one','two','three','four','five','six','seven','eight','nine','ten','hundred','thousand'
-            ,'milion','One','Two','Three','Four','Five','Six','Seven','Eight','Nine','Ten','Hundred','Thousand','Milion']
+        text_num_list = ['one','two','three','four','five','six','seven','eight','nine','hundred','thousand'
+            ,'million','One','Two','Three','Four','Five','Six','Seven','Eight','Nine','Ten','Hundred','Thousand','Million']
 
-
-        file = open(filename, 'w')
+        file = open("vec_results_test/" + file + ".txt", 'w')
 
         for i,sentence in enumerate(self.parser.tag_sentence):
             for j,word in enumerate(sentence):
