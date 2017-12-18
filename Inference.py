@@ -174,14 +174,14 @@ class Inferece:
                                 text_num.append(
                                     self.parser.word_sentence[i][j] + " | guess: " + self.results[i][j] + " | true: " +
                                     self.parser.tag_sentence[i][j])
-        print("capital letters:",cap_let)
-        print(cap_let_l)
-        print("capital word: ", cap_word)
-        print(cap_word_l)
-        print("number: ",num)
-        print(num_l)
-        print("textual number: ",num_txt)
-        print(text_num)
+        # print("capital letters:",cap_let)
+        # print(cap_let_l)
+        # print("capital word: ", cap_word)
+        # print(cap_word_l)
+        # print("number: ",num)
+        # print(num_l)
+        # print("textual number: ",num_txt)
+        # print(text_num)
 
         print("correct: ", 100*accuracy/(accuracy+missed))
 

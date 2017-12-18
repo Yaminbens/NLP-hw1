@@ -31,7 +31,7 @@ VECTESTb = VECSAVEb
 #step size
 LAMBDAc = 0.1
 #maximum iteration
-MAXITERc = 32
+MAXITERc = 31
 #accuracy for optimization
 FACTRc = 10.0
 
