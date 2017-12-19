@@ -28,7 +28,7 @@ def test_basic(model_basic):
     result_basic.print_confusion("basic_conf")
 
 def competition_basic(model_basic):
-    parsed = Parser("comp.wtag")
+    parsed = Parser("comp.words")
     result_basic = Inferece(model_basic, parsed)
     result_basic.tag_text("comp_m1_305056293.wtag")
 
@@ -51,7 +51,7 @@ def test_complex(model_complex):
     result_complex.print_confusion("complex_conf")
 
 def competition_complex(model_complex):
-    parsed = Parser("comp.wtag")
+    parsed = Parser("comp.words")
     result_complex = Inferece(model_complex, parsed)
     result_complex.tag_text("comp_m2_305056293.wtag")
 
@@ -63,6 +63,7 @@ def main():
     #Parsing and initiating dictionaries for features vector
     dictionary = Dict("train.wtag")
     print("dictionary created")
+
     # Training - Basic Model
     model_basic = train_basic(deepcopy(dictionary))
     print("basic model trained")

@@ -126,7 +126,7 @@ class Inferece:
         text_num_list = ['one','two','three','four','five','six','seven','eight','nine','hundred','thousand'
             ,'million','One','Two','Three','Four','Five','Six','Seven','Eight','Nine','Ten','Hundred','Thousand','Million']
 
-        file = open("vec_results_test/" + file + ".txt", 'w')
+        # file = open("vec_results_test/" + file + ".txt", 'w')
 
         for i,sentence in enumerate(self.parser.tag_sentence):
             for j,word in enumerate(sentence):
@@ -138,7 +138,7 @@ class Inferece:
                         seen = 'seen'
                     else:
                         seen = 'unseen'
-                    file.write("guess: "+self.results[i][j]+" true: "+self.parser.tag_sentence[i][j]+ " word: "+self.parser.word_sentence[i][j]+" "+seen+"\n")
+                    # file.write("guess: "+self.results[i][j]+" true: "+self.parser.tag_sentence[i][j]+ " word: "+self.parser.word_sentence[i][j]+" "+seen+"\n")
 
                     #confusion matrix
                     if self.parser.tag_sentence[i][j] not in self.confusion:
@@ -148,32 +148,32 @@ class Inferece:
                     else:
                         self.confusion[self.parser.tag_sentence[i][j]][self.results[i][j]]+=1
 
-                    if len(self.parser.word_sentence[i][j]) == 1:
-                        if self.parser.word_sentence[i][j][0].isupper():
-                            cap_let +=1
-                            cap_word += 1
-                            cap_let_l.append(self.parser.word_sentence[i][j]+" | guess: "+self.results[i][j] +" | true: "+ self.parser.tag_sentence[i][j])
-                            cap_word_l.append(self.parser.word_sentence[i][j]+" | guess: "+self.results[i][j] +" | true: "+ self.parser.tag_sentence[i][j])
-                    elif len(self.parser.word_sentence[i][j]) > 1:
-                        if self.parser.word_sentence[i][j][0].isupper():
-                            cap_let += 1
-                            cap_let_l.append(self.parser.word_sentence[i][j]+" | guess: "+self.results[i][j] +" | true: "+ self.parser.tag_sentence[i][j])
-                            if self.parser.word_sentence[i][j][1].isupper():
-                                cap_word += 1
-                                cap_word_l.append(
-                                    self.parser.word_sentence[i][j] + " | guess: " + self.results[i][j] + " | true: " +
-                                    self.parser.tag_sentence[i][j])
-                        if self.parser.word_sentence[i][j][0].isdigit():
-                            num += 1
-                            num_l.append(
-                                    self.parser.word_sentence[i][j] + " | guess: " + self.results[i][j] + " | true: " +
-                                    self.parser.tag_sentence[i][j])
-                        for x in text_num_list:
-                            if x in self.parser.word_sentence[i][j]:
-                                num_txt += 1
-                                text_num.append(
-                                    self.parser.word_sentence[i][j] + " | guess: " + self.results[i][j] + " | true: " +
-                                    self.parser.tag_sentence[i][j])
+                    # if len(self.parser.word_sentence[i][j]) == 1:
+                    #     if self.parser.word_sentence[i][j][0].isupper():
+                    #         cap_let +=1
+                    #         cap_word += 1
+                    #         cap_let_l.append(self.parser.word_sentence[i][j]+" | guess: "+self.results[i][j] +" | true: "+ self.parser.tag_sentence[i][j])
+                    #         cap_word_l.append(self.parser.word_sentence[i][j]+" | guess: "+self.results[i][j] +" | true: "+ self.parser.tag_sentence[i][j])
+                    # elif len(self.parser.word_sentence[i][j]) > 1:
+                    #     if self.parser.word_sentence[i][j][0].isupper():
+                    #         cap_let += 1
+                    #         cap_let_l.append(self.parser.word_sentence[i][j]+" | guess: "+self.results[i][j] +" | true: "+ self.parser.tag_sentence[i][j])
+                    #         if self.parser.word_sentence[i][j][1].isupper():
+                    #             cap_word += 1
+                    #             cap_word_l.append(
+                    #                 self.parser.word_sentence[i][j] + " | guess: " + self.results[i][j] + " | true: " +
+                    #                 self.parser.tag_sentence[i][j])
+                    #     if self.parser.word_sentence[i][j][0].isdigit():
+                    #         num += 1
+                    #         num_l.append(
+                    #                 self.parser.word_sentence[i][j] + " | guess: " + self.results[i][j] + " | true: " +
+                    #                 self.parser.tag_sentence[i][j])
+                    #     for x in text_num_list:
+                    #         if x in self.parser.word_sentence[i][j]:
+                    #             num_txt += 1
+                    #             text_num.append(
+                    #                 self.parser.word_sentence[i][j] + " | guess: " + self.results[i][j] + " | true: " +
+                    #                 self.parser.tag_sentence[i][j])
         # print("capital letters:",cap_let)
         # print(cap_let_l)
         # print("capital word: ", cap_word)

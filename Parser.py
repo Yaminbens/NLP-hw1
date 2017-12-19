@@ -33,7 +33,10 @@ class Parser:
                     word = re.findall("[^_]*", w)
 
                     tmp_word_sentence.append(word[0])
-                    tmp_tag_sentence.append(word[2])
+                    try:
+                        tmp_tag_sentence.append(word[2])
+                    except:
+                        pass
 
                 self.word_sentence.append(tmp_word_sentence)
                 self.tag_sentence.append(tmp_tag_sentence)
